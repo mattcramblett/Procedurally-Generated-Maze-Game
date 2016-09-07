@@ -5,6 +5,7 @@ public class ObjectMove : MonoBehaviour {
 
 public float rate = 3f;
 
+/*
 	void OnTriggerEnter(Collider other)
 	{
 		print("Collision detected with trigger object " + other.name);
@@ -19,6 +20,7 @@ public float rate = 3f;
 	{
 		print(gameObject.name + " and trigger object " + other.name + " are no longer colliding");
 	}
+*/
 
 	// Update is called once per frame
     void Update() {
