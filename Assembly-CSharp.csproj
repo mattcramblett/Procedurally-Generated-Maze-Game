@@ -47,6 +47,7 @@
   <ItemGroup>
      <Compile Include="Assets\CameraController.cs" />
      <Compile Include="Assets\CreateMaze.cs" />
+     <Compile Include="Assets\ModelMesh.cs" />
      <Compile Include="Assets\ObjectMove.cs" />
      <Compile Include="Assets\PlaneRotate.cs" />
  <Reference Include="UnityEngine.Networking">
