@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ObjectMove : MonoBehaviour {
 
-public float rate = 3f;
+public float rate = 5f;
 
 /*
 	void OnTriggerEnter(Collider other)
