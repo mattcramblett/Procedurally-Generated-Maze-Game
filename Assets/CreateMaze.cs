@@ -7,8 +7,8 @@ public class CreateMaze : MonoBehaviour {
 
 	static int gridXMin = -20;
 	static int gridZMin = -20;
-	static int gridXMax = 20;
-	static int gridZMax = 20;
+	static int gridXMax = 21;
+	static int gridZMax = 21;
 	int xSize = -1 * gridXMin + gridXMax;
 	int zSize = -1 * gridZMin + gridZMax;
 
@@ -36,7 +36,7 @@ public class CreateMaze : MonoBehaviour {
 		{
 			zval = rand.Next(zSize);
 		}
-		maze[xval,zval] = 0;
+
 
 
 		//　Allocate the maze with recursive method
@@ -47,19 +47,15 @@ public class CreateMaze : MonoBehaviour {
 
 	public void allocate(int x, int z)
 	{
-		// 4 random directions
+		//shuffled directions
 		int[] directions = new int[]{1,2,3,4};
-
-		//directions = generateRandomDirections();
 		Shuffle(directions);
 
-		// Examine each direction
 		for (int i = 0; i < directions.Length; i++)
 		{
-
 			switch(directions[i]){
-			case 1: // Up
-				//　Whether 2 cells up is out or not
+			//Up
+			case 1:
 				if (x - 2 <= 0)
 					continue;
 				if (maze[x - 2,z] != 0)
@@ -71,21 +67,8 @@ public class CreateMaze : MonoBehaviour {
 					allocate(x - 2, z);
 				}
 				break;
-			case 2: // Right
-				// Whether 2 cells to the right is out or not
-				if (z + 2 >= zSize - 1)
-					continue;
-				if (maze[x,z + 2] != 0)
-				{
-					maze[x,z + 2] = 0;
-					putWall (x, z + 2);
-					maze[x,z + 1] = 0;
-					putWall (x, z + 1);
-					allocate(x, z + 2);
-				}
-				break;
-			case 3: // Down
-				// Whether 2 cells down is out or not
+			//Down
+			case 2: 
 				if (x + 2 >= xSize - 1)
 					continue;
 				if (maze[x + 2,z] != 0)
@@ -97,8 +80,21 @@ public class CreateMaze : MonoBehaviour {
 					allocate(x + 2, z);
 				}
 				break;
-			case 4: // Left
-				// Whether 2 cells to the left is out or not
+			// Right
+			case 3: 
+				if (z + 2 >= zSize - 1)
+					continue;
+				if (maze[x,z + 2] != 0)
+				{
+					maze[x,z + 2] = 0;
+					putWall (x, z + 2);
+					maze[x,z + 1] = 0;
+					putWall (x, z + 1);
+					allocate(x, z + 2);
+				}
+				break;
+			//Left
+			case 4:
 				if (z - 2 <= 0)
 					continue;
 				if (maze[x,z - 2] != 0)
@@ -115,40 +111,75 @@ public class CreateMaze : MonoBehaviour {
 
 	}
 
-	// Fisher Yates Shuffle
 	public void Shuffle<T>(T[] array)
 	{
-		System.Random _random = new System.Random();
-		for (int i = array.Length; i > 1; i--)
-		{
-			// Pick random element to swap.
-			int j = _random.Next(i); // 0 <= j <= i-1
-			// Swap.
-			T tmp = array[j];
-			array[j] = array[i - 1];
-			array[i - 1] = tmp;
+		System.Random rand = new System.Random ();
+		int n = array.Length;
+		while (n > 1) {
+			n--;
+			int k = rand.Next (n + 1);
+			T value = array [k];
+			array [k] = array [n];
+			array [n] = value;
 		}
 		Thread.Sleep(1);
 	}
-
-
-
-
-
+		
 	void Start(){
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			print("here");
 		}
+	}
+
+	bool answer(int x, int z){
+		if (x == 20) {
+			if (z == 2 || z == 1) {
+				return true;
+			}
+			if (z <= 5) {
+				return true;
+			}
+			if (z >= 21) {
+				return true;
+			}
+		}
+		if (x < 20 && x > 15) {
+			if (z == 6) {
+				return true;
+			}
+		}
+		if (x == 14) {
+			if (z <= 12 && z >= 6) {
+				return true;
+			}
+		}
+		if (x == 15) {
+			if (z <= 20 && z >= 12) {
+				return true;
+			}
+		}
+		if (x > 15 && x < 20) {
+			if (z == 20) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void wall(int x, int z, String color){
+		GameObject mazeWall = GameObject.CreatePrimitive (PrimitiveType.Cube);
+		mazeWall.transform.parent = transform;
+		mazeWall.name = "wall" + x + "." + z;
+		mazeWall.GetComponent<Renderer> ().material.shader = Shader.Find (color);
+		mazeWall.transform.position = new Vector3 ((float)x + gridXMin, 0.5f, (float)z + gridZMin);
+		mazeWall.transform.localScale = new Vector3 (.25f, 1f, .25f);
 	}
 
 
 	void putWall(int x, int z){
-		GameObject mazeWall = GameObject.CreatePrimitive (PrimitiveType.Cube);
-		mazeWall.transform.parent = transform;
-		mazeWall.name = "wall" + x + "." + z;
-		mazeWall.GetComponent<Renderer>().material.shader = Shader.Find("cubeColor");
-		mazeWall.transform.position = new Vector3 ((float)x + gridXMin, 0.5f, (float)z + gridZMin);
-		mazeWall.transform.localScale = new Vector3 (.25f, 1f, .25f);
+		if (answer(x,z)) {
+		} else{
+			wall (x, z, "cubeColor");
+		}
 	}
 
 
@@ -162,7 +193,7 @@ public class CreateMaze : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			//Destroy ();
+			Destroy ();
 			int[,] maze = GenerateMaze (xSize, zSize);
 
 			//RestartGame (maze);
