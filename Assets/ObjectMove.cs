@@ -4,6 +4,8 @@ using System.Collections;
 public class ObjectMove : MonoBehaviour {
 
 public float rate = 5f;
+public float rotateRate = 2f;
+
 
 /*
 	void OnTriggerEnter(Collider other)
@@ -38,9 +40,17 @@ public float rate = 5f;
         }
 
         if (Input.GetKey(KeyCode.S)){
-			
-        	transform.position -= Vector3.forward * rate * Time.deltaTime;
+			transform.position -= Vector3.forward * rate * Time.deltaTime;
         }
+        //Rotate object counter-clockwise:
+        if (Input.GetKey(KeyCode.Q)){
+        	transform.Rotate(Vector3.up, -1 * rotateRate);
+        }
+        //Rotate object clockwise:
+        if (Input.GetKey(KeyCode.E)){
+        	transform.Rotate(Vector3.up, rotateRate);
+        }
+
     }
 		
 }
