@@ -169,7 +169,12 @@ public class CreateMaze : MonoBehaviour {
 		GameObject mazeWall = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		mazeWall.transform.parent = transform;
 		mazeWall.name = "wall" + x + "." + z;
-		mazeWall.GetComponent<Renderer> ().material.shader = Shader.Find (color);
+
+		//Color:
+		Material material = new Material(Shader.Find("Standard"));
+		material.color = Color.black;
+		mazeWall.GetComponent<Renderer>().material = material;
+
 		mazeWall.transform.position = new Vector3 ((float)x + gridXMin, 0.5f, (float)z + gridZMin);
 		mazeWall.transform.localScale = new Vector3 (.25f, 1f, .25f);
 	}
