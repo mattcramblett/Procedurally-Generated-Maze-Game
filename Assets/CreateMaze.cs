@@ -5,6 +5,7 @@ using System.Threading;
 
 public class CreateMaze : MonoBehaviour {
 
+	//grid dimensions
 	static int gridXMin = -20;
 	static int gridZMin = -20;
 	static int gridXMax = 21;
@@ -14,7 +15,7 @@ public class CreateMaze : MonoBehaviour {
 
 
 
-	public int[,] maze { get; private set; }
+	public int[,] maze;
 
 	public int[,] GenerateMaze(int xSize,int zSize)
 	{
@@ -31,15 +32,13 @@ public class CreateMaze : MonoBehaviour {
 		{
 			xval = rand.Next(xSize);
 		}
-		int zval = rand.Next(zSize);
+		int zval = rand.Next(xSize);
 		while (zval % 2 == 0)
 		{
-			zval = rand.Next(zSize);
+			zval = rand.Next(xSize);
 		}
-
-
-
-		//　Allocate the maze with recursive method
+			
+		//maze
 		allocate(xval, zval);
 
 		return maze;
@@ -47,17 +46,21 @@ public class CreateMaze : MonoBehaviour {
 
 	public void allocate(int x, int z)
 	{
-		//shuffled directions
+		//too fast without sleep? creates a bunch of long passages
+		Thread.Sleep(1);
+		//up, down, left, right
 		int[] directions = new int[]{1,2,3,4};
+		//mix for generation
 		Shuffle(directions);
-
-		for (int i = 0; i < directions.Length; i++)
+		int i;
+		for (i = 0; i < directions.Length; i++)
 		{
+			//faster than original if/elseif
 			switch(directions[i]){
 			//Up
 			case 1:
 				if (x - 2 <= 0)
-					continue;
+					break;
 				if (maze[x - 2,z] != 0)
 				{
 					maze[x-2,z] = 0;
@@ -70,7 +73,7 @@ public class CreateMaze : MonoBehaviour {
 			//Down
 			case 2: 
 				if (x + 2 >= xSize - 1)
-					continue;
+					break;
 				if (maze[x + 2,z] != 0)
 				{
 					maze[x + 2,z] = 0;
@@ -83,7 +86,7 @@ public class CreateMaze : MonoBehaviour {
 			// Right
 			case 3: 
 				if (z + 2 >= zSize - 1)
-					continue;
+					break;
 				if (maze[x,z + 2] != 0)
 				{
 					maze[x,z + 2] = 0;
@@ -96,7 +99,7 @@ public class CreateMaze : MonoBehaviour {
 			//Left
 			case 4:
 				if (z - 2 <= 0)
-					continue;
+					break;
 				if (maze[x,z - 2] != 0)
 				{
 					maze[x,z - 2] = 0;
@@ -111,25 +114,20 @@ public class CreateMaze : MonoBehaviour {
 
 	}
 
-	public void Shuffle<T>(T[] array)
+	//shuffle to choose random direction
+	public void Shuffle(int[] array)
 	{
 		System.Random rand = new System.Random ();
-		int n = array.Length;
-		while (n > 1) {
-			n--;
+		int n = 0;
+		while (n < array.Length ) {
 			int k = rand.Next (n + 1);
-			T value = array [k];
+			int temp = array [k];
 			array [k] = array [n];
-			array [n] = value;
+			array [n] = temp;
+			n++;
 		}
-		Thread.Sleep(1);
 	}
 		
-	void Start(){
-		if (Input.GetKeyDown (KeyCode.Space)) {
-		}
-	}
-
 	bool answer(int x, int z){
 		if (x == 20) {
 			if (z == 2 || z == 1) {
@@ -142,7 +140,7 @@ public class CreateMaze : MonoBehaviour {
 				return true;
 			}
 		}
-		if (x < 20 && x > 15) {
+		if (x <= 20 && x >= 15) {
 			if (z == 6) {
 				return true;
 			}
@@ -157,7 +155,7 @@ public class CreateMaze : MonoBehaviour {
 				return true;
 			}
 		}
-		if (x > 15 && x < 20) {
+		if (x > 15 && x <= 20) {
 			if (z == 20) {
 				return true;
 			}
