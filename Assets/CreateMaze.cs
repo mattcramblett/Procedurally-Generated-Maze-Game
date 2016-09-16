@@ -52,6 +52,15 @@ public class CreateMaze : MonoBehaviour {
 		int[] directions = new int[]{1,2,3,4};
 		//mix for generation
 		Shuffle(directions);
+		int x2down = x - 2;
+		int x1down = x - 1;
+		int z2down = z - 2;
+		int z1down = z - 1;
+
+		int x2up = x + 2;
+		int x1up = x + 1;
+		int z2up = z + 2;
+		int z1up = z + 1;
 		int i;
 		for (i = 0; i < directions.Length; i++)
 		{
@@ -59,54 +68,54 @@ public class CreateMaze : MonoBehaviour {
 			switch(directions[i]){
 			//Up
 			case 1:
-				if (x - 2 <= 0)
+				if (x2down <= 0)
 					break;
-				if (maze[x - 2,z] != 0)
+				if (maze[x2down,z] != 0)
 				{
-					maze[x-2,z] = 0;
-					putWall (x - 2, z);
-					maze[x-1,z] = 0;
-					putWall (x - 1, z);
-					allocate(x - 2, z);
+					maze[x2down,z] = 0;
+					putWall (x2down, z);
+					maze[x1down,z] = 0;
+					putWall (x1down, z);
+					allocate(x2down, z);
 				}
 				break;
 			//Down
 			case 2: 
-				if (x + 2 >= xSize - 1)
+				if (x2up >= xSize - 1)
 					break;
-				if (maze[x + 2,z] != 0)
+				if (maze[x2up,z] != 0)
 				{
-					maze[x + 2,z] = 0;
-					putWall (x + 2, z);
-					maze[x + 1,z] = 0;
-					putWall (x + 1, z);
-					allocate(x + 2, z);
+					maze[x2up,z] = 0;
+					putWall (x2up, z);
+					maze[x1up,z] = 0;
+					putWall (x1up, z);
+					allocate(x2up, z);
 				}
 				break;
 			// Right
 			case 3: 
-				if (z + 2 >= zSize - 1)
+				if (z2up >= zSize - 1)
 					break;
-				if (maze[x,z + 2] != 0)
+				if (maze[x,z2up] != 0)
 				{
-					maze[x,z + 2] = 0;
-					putWall (x, z + 2);
-					maze[x,z + 1] = 0;
-					putWall (x, z + 1);
-					allocate(x, z + 2);
+					maze[x,z2up] = 0;
+					putWall (x, z2up);
+					maze[x,z1up] = 0;
+					putWall (x, z1up);
+					allocate(x, z2up);
 				}
 				break;
 			//Left
 			case 4:
-				if (z - 2 <= 0)
+				if (z2down <= 0)
 					break;
-				if (maze[x,z - 2] != 0)
+				if (maze[x,z2down] != 0)
 				{
-					maze[x,z - 2] = 0;
-					putWall (x, z - 2);
-					maze[x,z - 1] = 0;
-					putWall (x, z - 1);
-					allocate(x, z - 2);
+					maze[x,z2down] = 0;
+					putWall (x, z2down);
+					maze[x,z1down] = 0;
+					putWall (x, z1down);
+					allocate(x, z2down);
 				}
 				break;
 			}
